@@ -1,0 +1,137 @@
+package jd_project;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.firefox.*;
+
+
+
+public class product_search_selenium2 {
+
+	public static void main(String[] args) throws InterruptedException {
+		
+		WebDriver driver=new FirefoxDriver();
+		
+		//第1步，进入京东首页，检查是否进入京东页面
+		
+	
+		driver.navigate().to("http://www.jd.com");
+		
+		System.out.println("检查是否进入京东 首页:"+"https://www.jd.com/".equals(driver.getCurrentUrl()));
+		
+		
+		
+		//第2步,在搜索框中搜索"23232dsdfsfdsfds",检查页面是否弹出对应的提示信息
+		
+		driver.findElement(By.id("key")).clear();
+		
+		driver.findElement(By.id("key")).sendKeys("23232dsdfsfdsfds");
+		
+		driver.findElement(By.xpath("html/body/div[3]/div[2]/div/button")).click();
+		
+		Thread.sleep(5000);
+		
+		System.out.println("页面上出现提示：抱歉，没有找到与“23232dsdfsfdsfds”相关的商品"+driver.findElement(By.xpath("html/body/div[5]/div[1]/div")).getText().contains("抱歉，没有找到与“23232dsdfsfdsfds”相关的商品"));
+		
+		
+		
+		 //第3步骤,在搜索栏上搜索"收集",页面上出现提示 “我们为您显示'手机'相关的商品。仍然搜索：‘收集‘"
+		
+		driver.findElement(By.id("key")).clear();
+		
+		driver.findElement(By.id("key")).sendKeys("收集");
+		
+		driver.findElement(By.xpath("html/body/div[3]/div[2]/div/button")).click();
+		
+		Thread.sleep(5000);
+		
+		System.out.println("我们为您显示“手机”相关的商品。仍然搜索：“收集” "+driver.findElement(By.xpath("html/body/div[5]/div[3]")).getText().contains("我们为您显示“手机”相关的商品。仍然搜索：“收集”"));
+		
+		
+		//第4步骤，在页面上搜索团购，检查是否进入团购页面
+		
+		driver.findElement(By.id("key")).clear();
+		
+		driver.findElement(By.id("key")).sendKeys("团购");
+		
+		driver.findElement(By.xpath("html/body/div[3]/div[2]/div/button")).click();
+		
+		Thread.sleep(5000);
+		
+		System.out.println("是否进入了京东团购页面"+"http://tuan.jd.com/quanguo-index.html".equals(driver.getCurrentUrl()));
+		
+		
+		//第5步骤，在页面上搜素"移动"，验证是否有调用充值插件
+		
+		driver.navigate().back();
+		
+		Thread.sleep(5000);
+		
+		driver.findElement(By.id("key")).clear();
+		
+		driver.findElement(By.id("key")).sendKeys("移动");
+		
+		driver.findElement(By.xpath("html/body/div[3]/div[2]/div/button")).click();
+		
+		Thread.sleep(30000);
+	    
+		boolean isFindControl=false;
+	
+		
+		//判断页面上是否存在充值控件
+		try {
+			
+			driver.findElement(By.className("once ic"));
+			
+			isFindControl=true;
+			
+		} catch (Exception e) {
+			
+			isFindControl=false;
+		}
+		
+		System.out.println("搜素界面上是否出现“手机充值”等相关控件:"+isFindControl);
+		
+		
+		
+		 //第6步骤，在搜素页面上搜素图书，搜索结果是否以列表形式展示
+		
+		driver.findElement(By.id("key")).clear();
+		
+		driver.findElement(By.id("key")).sendKeys("图书");
+		
+		driver.findElement(By.xpath("html/body/div[3]/div[2]/div/button")).click();
+		
+		Thread.sleep(5000);
+		
+		System.out.println("搜素出来的结果是否以列表的形似展示"+"ui-switchable clearfix".equals(driver.findElement(By.id("tab")).getAttribute("class")));
+		
+		
+		//第7步骤，在搜素页面上搜素手机，搜素结果是否以网络形式展示
+		
+		driver.findElement(By.id("key")).clear();
+		
+		driver.findElement(By.id("key")).sendKeys("手机");
+		
+		driver.findElement(By.xpath("html/body/div[3]/div[2]/div/button")).click();
+		
+		Thread.sleep(5000);
+		
+		System.out.println("搜素结果是否以网络形式展示:"+"goods-list-v1 gl-type-4 J-goods-list".equals(driver.findElement(By.id("J_goodsList")).getAttribute("class")));
+		
+		System.out.println(driver.findElement(By.id("J_goodsList")).getAttribute("class"));
+		
+		//第8步，搜素具体型号，是否进入相关产品页面
+		
+		driver.findElement(By.id("key")).clear();
+		
+		driver.findElement(By.id("key")).sendKeys("635085");
+		
+		driver.findElement(By.xpath("html/body/div[3]/div[2]/div/button")).click();
+		
+		Thread.sleep(5000);
+		
+		System.out.println("进入该商品的具体信息页面:"+"http://item.jd.com/635085.html".equals(driver.getCurrentUrl()));
+		
+	}
+
+}

@@ -1,0 +1,87 @@
+package jd_project;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class buy_product_selenium2 {
+
+	public static void main(String[] args) throws InterruptedException{
+		
+		//第1步，进入商品详细页面，检查是否进入商品详细页面
+		WebDriver driver=new FirefoxDriver();
+		
+		driver.navigate().to("http://item.jd.com/152026.html");
+		
+		System.out.println("检查页面是否进入商品详细页面:"+"http://item.jd.com/152026.html".equals(driver.getCurrentUrl()));
+		
+		
+		//第2步，点击加入购物车，检查页面是否出现“商品已经加入购物车”提示
+		
+		Thread.sleep(5000);
+		
+		String itemname=driver.findElement(By.xpath("//div[@id='name']//h1")).getText();
+		
+		System.out.println(itemname);
+		
+		driver.findElement(By.linkText("加入购物车")).click();
+		
+		System.out.println("检查页面是否出现“商品已加入购物车”提示:"+driver.findElement(By.xpath("//div[@class='success-b']//h3")).getText().contains("商品已成功加入购物车！"));
+		
+		
+		
+		//第3步，点击继续购物，检查是否已经返回商品详细页面
+		
+		driver.findElement(By.linkText("继续购物")).click();
+		
+		Thread.sleep(5000);
+		
+		System.out.println("返回之前的商品详细页面:"+"http://item.jd.com/152026.html".equals(driver.getCurrentUrl()));
+		
+		
+		//第4步，返回购车页面
+		
+		driver.navigate().back();
+		
+		Thread.sleep(5000);
+		
+		driver.findElement(By.linkText("加入购物车")).click();
+		
+		Thread.sleep(5000);
+		
+		System.out.println("进入购物车页面"+"商品已成功加入购物车".equals(driver.getTitle()));
+		
+		
+		System.out.println("显示之前添加的页面"+driver.findElement(By.cssSelector("Body")).getText().contains(itemname));
+		
+		
+		//第5步，点击去结算，检查是否进入结算
+		
+		driver.findElement(By.id("GotoShoppingCart")).click();
+		
+		Thread.sleep(5000);
+		
+		driver.findElement(By.className("submit-btn")).click();
+		
+		Thread.sleep(5000);
+		
+		
+		driver.switchTo().frame("dialogIframe");//登录页面在iframe里面，要先转向该iframe
+		
+		
+		driver.findElement(By.id("loginname")).clear();
+		
+		driver.findElement(By.id("loginname")).sendKeys("15982382550");
+		
+		driver.findElement(By.id("nloginpwd")).sendKeys("woaigaoqiao4");
+		
+		driver.findElement(By.id("loginsubmit")).click();
+		
+		Thread.sleep(5000);
+		
+		System.out.println("检查页面是否进入订单天禧额页面"+"订单结算页 -京东商城<".equals(driver.getTitle()));
+		
+		
+	}
+
+}

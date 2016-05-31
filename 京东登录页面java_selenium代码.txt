@@ -1,0 +1,102 @@
+package jd_project;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class login_class_selenium2 {
+
+	public static void main(String[] args) throws InterruptedException {
+		
+			WebDriver driver=new FirefoxDriver();
+		
+			
+			//第1步，进入京东登录页面，并验证是否进入此页面
+			
+			driver.navigate().to("https://passport.jd.com/new/login.aspx");
+			
+		    Thread.sleep(4000);
+
+		    System.out.println("检查页面是否进入登录页面"+"https://passport.jd.com/new/login.aspx".equals(driver.getCurrentUrl()));
+		    
+		    String firstwindow = driver.getWindowHandle();//保留窗口句柄，切换窗口之前
+		    
+
+		    //第2步，进入找回密码页面，并验证是否进入此页面
+		    
+		    driver.findElement(By.linkText("忘记密码?")).click();
+		    
+		    Thread.sleep(9000);
+
+		    driver.switchTo().window(driver.getWindowHandles().toArray()[1].toString());//将driver窗口句柄指向新的窗口，打开新的窗口后可以用此方法，然后在保留新窗口的当前句柄
+		    
+		    String secondwindow = driver.getWindowHandle();
+		   
+		    driver.switchTo().window(secondwindow);
+		    
+		    System.out.println("检查是否已经进入了找回密码页面"+"http://safe.jd.com/findPwd/index.action".equals(driver.getCurrentUrl()));
+		    
+		    driver.close();
+		    
+		    //第3步，返回登录页面，不输入用户名，提交，系统是否提示，请输入用户名
+		   
+		    driver.switchTo().window(firstwindow);
+		    
+		    driver.findElement(By.id("loginname")).clear();
+		    
+		    driver.findElement(By.id("loginname")).sendKeys("");
+		    
+		    driver.findElement(By.id("loginsubmit")).click();		    
+		    Thread.sleep(3000);
+		    
+		    System.out.println("弹出提示 “请输入用户名/邮箱/已验证手机”:"+driver.findElement(By.className("msg-error")).getText().contains("请输入账户名和密码"));
+		    
+		    
+		    
+		    
+		    //第4步，只输入用户名，不输入密码提交，系统提示，请输入密码
+		    
+		    driver.findElement(By.id("loginname")).clear();
+		    
+		    driver.findElement(By.id("loginname")).sendKeys("errorusername");
+		    
+		    driver.findElement(By.id("loginsubmit")).click();
+		    
+		    System.out.println("弹出提示 “请输入密码”:"+driver.findElement(By.className("msg-error")).getText().contains("请输入密码"));
+		    
+		    //第5步，只输入密码不输入用户名，系统提示请输入账户名
+		    
+		    driver.findElement(By.id("loginname")).clear();
+		    
+		    driver.findElement(By.id("nloginpwd")).sendKeys("errorpwd1");
+		    
+		    driver.findElement(By.id("loginsubmit")).click();
+		    
+		    Thread.sleep(3000);
+		    
+		    System.out.println("弹出提示 “请输入用户名/邮箱/已验证手机”:"+driver.findElement(By.className("msg-error")).getText().contains("请输入账户名"));
+		    
+		    driver.navigate();
+		    
+		    //第6步，输入正确的用户名和密码，系统跳转到首页，操作栏上出现，返利岛字样，并点击退出链接，退出登录
+		    
+		      
+		    driver.findElement(By.id("loginname")).clear();
+		    
+		    driver.findElement(By.id("nloginpwd")).clear();
+		    
+		    driver.findElement(By.id("loginname")).sendKeys("15982382550");
+		    
+		    driver.findElement(By.id("nloginpwd")).sendKeys("woaigaoqiao4");
+		    
+		    Thread.sleep(9000);
+		    
+		    driver.findElement(By.id("loginsubmit")).click();
+		    
+		    Thread.sleep(9000);
+		    
+		    System.out.println("成功跳转到首页，操作栏上出现返利岛字样"+"返利岛".equals(driver.findElement(By.className("link-user")).getText()));
+		    
+	}
+
+}
